@@ -23,15 +23,22 @@ ces noms en dur dans votre code).*/
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <iostream>
 #include <stdio.h>
+
+#define MAX 1000
 
 int lireDonnees(char* nomFichier, int* T) {
 	FILE* fichier_source = fopen(nomFichier, "r");
 
+	if (!fichier_source) {
+		printf("le fichier source n'existe pas\n");
+
+		return 0;
+	}
+	
 	int max = 0;
 
-	while (fscanf(fichier_source, "%d", &T[max]) == 1) {
+	while (max < MAX && fscanf(fichier_source, "%d", &T[max]) == 1) {
 		max++;
 	}
 
@@ -42,7 +49,7 @@ int lireDonnees(char* nomFichier, int* T) {
 
 void afficherTableau(int* T, int nb) {
 	for (int i = 0; i < nb; i++) {
-		printf("%d",T[i]);
+		printf("|%d|",T[i]);
 	}
 
 	printf("\n");
@@ -51,8 +58,8 @@ void afficherTableau(int* T, int nb) {
 void triABulles(int* T, int nb) {
 	int sauve = 0;
 
-	for (int i = 0; i < nb; i++) {
-		for (int j = 0; j < nb-1; j++) {
+	for (int i = 0; i < nb - 1; i++) {
+		for (int j = 0; j < nb - 1 - i; j++) {
 			if (T[j] > T[j + 1]) {
 				sauve = T[j+ 1];
 				T[j + 1] = T[j];
@@ -65,21 +72,33 @@ void triABulles(int* T, int nb) {
 void enregistrerDonnees(char* nomFichier, int* T, int nb) {
 	FILE* fichier_suivant = fopen(nomFichier, "w");
 
-	for (int i = 0; i < nb; i++) {
-		fprintf(fichier_suivant, "%d", T[i]);
+	if (!fichier_suivant) {
+		printf("le fichier pour enregistrement n'existe pas\n");
+
 	}
-	fclose(fichier_suivant);
+	else {
+		for (int i = 0; i < nb; i++) {
+			fprintf(fichier_suivant, "%d\n", T[i]);
+		}
+
+		fclose(fichier_suivant);
+	}
 }
 
 
 int main() {
-	int T[1000];
+	int T[MAX];
 
 	char nomFichier_source[255] = "fichier_source.txt";
 	char nomFichier_suivant[255] = "fichier_suivant.txt";
 
 	int nb = lireDonnees(nomFichier_source, T);
 	
+	if (nb == 0) {
+		printf("aucune donnee a traiter\n");
+		return 1;
+	}
+
 	afficherTableau(T, nb);
 	
 	triABulles(T, nb);

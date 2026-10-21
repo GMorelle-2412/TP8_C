@@ -13,7 +13,7 @@ int main() {
 		return 1;
 	}
 
-	for (char c = 0; c != EOF; c = getc(fichier)) {
+	for (int c = 0; c != EOF; c = getc(fichier)) {
 		printf("%c", c);
 	}
 

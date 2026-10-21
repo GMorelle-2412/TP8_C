@@ -18,9 +18,29 @@ int calcule_taille_fichier(FILE* fichier) {
 }
 
 int main() {
-	FILE* source = fopen("source.txt", "r");
-	FILE* dest1 = fopen("dest1.txt", "r");
-	FILE* dest2 = fopen("dest2.txt", "r");
+	FILE* source = fopen("source.txt", "rb");
+
+	if (source == NULL) {
+		printf("Impossible d'ouvrir le fichier source.txt.\n");
+		return 1;
+	}
+
+	FILE* dest1 = fopen("dest1.txt", "rb");
+
+	if (dest1 == NULL) {
+		printf("Impossible d'ouvrir le fichier dest1.txt.\n");
+		fclose(source);
+		return 1;
+	}
+
+	FILE* dest2 = fopen("dest2.txt", "rb");
+
+	if (dest2 == NULL) {
+		printf("Impossible d'ouvrir le fichier dest2.txt.\n");
+		fclose(source);
+		fclose(dest1);
+		return 1;
+	}
 
 	printf("Fichier source = %d\n", calcule_taille_fichier(source));
 	printf("Fichier dest1 = %d\n", calcule_taille_fichier(dest1));

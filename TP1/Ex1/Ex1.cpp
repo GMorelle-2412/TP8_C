@@ -10,6 +10,11 @@ Refermez ensuite le fichier.*/
 int main(){
 	FILE* fichier = fopen("source.txt", "r");
 
+	if (fichier == NULL) {
+		printf("Impossible d'ouvrir le fichier source.txt.\n");
+		return 1;
+	}
+
 	for (int sauve = 0; sauve != EOF; sauve = getc(fichier)) {
 		printf("%c", sauve);
 	}
